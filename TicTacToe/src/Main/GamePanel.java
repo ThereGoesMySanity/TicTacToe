@@ -17,7 +17,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	private static final long serialVersionUID = 1L;
 	public static final int WIDTH = 360;
 	public static final int HEIGHT = 360;
-	public static final int SCALE = 2;
+	public static final int SCALE = 1;
 	private Thread thread;
 	private boolean running;
 	private int FPS = 60;

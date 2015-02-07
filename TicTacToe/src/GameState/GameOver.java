@@ -12,7 +12,6 @@ public class GameOver extends GameState {
 	
 	public GameOver(GameStateManager gsm){
 		this.gsm = gsm;
-		init();
 	}
 	public void init() {
 		
