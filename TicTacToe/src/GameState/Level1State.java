@@ -181,7 +181,7 @@ public class Level1State extends GameState {
 						fullBoard.get(i).set(j, fullBoard.get(i).get(j)+2);
 						fullBoard.get(i+1).set(j+1, fullBoard.get(i).get(j));
 						fullBoard.get(i+2).set(j+2, fullBoard.get(i).get(j));
-						buildFromLastMove();
+						buildFromLastMove(false);
 					}
 				}
 				if(i < fullBoard.size()-2){
@@ -191,7 +191,7 @@ public class Level1State extends GameState {
 						fullBoard.get(i).set(j, fullBoard.get(i).get(j)+2);
 						fullBoard.get(i+1).set(j, fullBoard.get(i).get(j));
 						fullBoard.get(i+2).set(j, fullBoard.get(i).get(j));
-						buildFromLastMove();
+						buildFromLastMove(false);
 					}
 				}
 				if(j < fullBoard.get(0).size()-2){
@@ -201,7 +201,7 @@ public class Level1State extends GameState {
 						fullBoard.get(i).set(j, fullBoard.get(i).get(j)+2);
 						fullBoard.get(i).set(j+1, fullBoard.get(i).get(j));
 						fullBoard.get(i).set(j+2, fullBoard.get(i).get(j));
-						buildFromLastMove();
+						buildFromLastMove(false);
 					}
 				}
 				if(j > 1 && i < fullBoard.size()-2){
@@ -211,7 +211,7 @@ public class Level1State extends GameState {
 						fullBoard.get(i).set(j, fullBoard.get(i).get(j)+2);
 						fullBoard.get(i+1).set(j-1, fullBoard.get(i).get(j));
 						fullBoard.get(i+2).set(j-2, fullBoard.get(i).get(j));
-						buildFromLastMove();
+						buildFromLastMove(false);
 					}
 				}
 			}
@@ -220,7 +220,7 @@ public class Level1State extends GameState {
 			System.out.println("full");
 			printBoard(fullBoard);
 			System.out.println("---------");
-			buildFromLastMove();
+			buildFromLastMove(true);
 			printBoard(fullBoard);
 		}
 		for(int i = 0; i < fullBoard.size(); i++){
@@ -268,12 +268,13 @@ public class Level1State extends GameState {
 							}
 						}
 					}
-					if(match.size()>=9)winner=2;
+					if(match.size()>=9){
+						winner=2;
+					}
 				}
 			}
 		}
 		if(winner != 0){
-			gsm.setState(GameStateManager.GAMEOVER);
 			if(winner == 1){
 				WIN = "X";
 			}
@@ -283,7 +284,8 @@ public class Level1State extends GameState {
 		}
 	}
 
-	private void buildFromLastMove(){
+
+	private void buildFromLastMove(boolean noMovesLeft){
 		int posx = lastMove.x%3;
 		int posy = lastMove.y%3;
 		switch(posx){
@@ -298,7 +300,7 @@ public class Level1State extends GameState {
 				}
 				else if(fullBoard.get(lastMove.y-3-posy).get(lastMove.x-3-posx) == 5){
 					addNewBoard(lastMove.y-posy-3, lastMove.x-posx-3, fullBoard);
-				}else{
+				}else if(noMovesLeft){
 					addNewBoard(-3, -3, fullBoard);
 				}
 				break;
@@ -311,7 +313,7 @@ public class Level1State extends GameState {
 				}
 				else if(fullBoard.get(lastMove.y-posy).get(lastMove.x-3-posx) == 5){
 					addNewBoard(lastMove.y-posy, lastMove.x-posx-3, fullBoard);
-				}else{
+				}else if(noMovesLeft){
 					addNewBoard(-3, -3, fullBoard);
 				}
 				break;
@@ -324,7 +326,7 @@ public class Level1State extends GameState {
 				}
 				else if(fullBoard.get(lastMove.y+3-posy).get(lastMove.x-3-posx) == 5){
 					addNewBoard(lastMove.y-posy+3, lastMove.x-posx-3, fullBoard);
-				}else{
+				}else if(noMovesLeft){
 					addNewBoard(-3, -3, fullBoard);
 				}
 				break;
@@ -341,12 +343,14 @@ public class Level1State extends GameState {
 				}
 				else if(fullBoard.get(lastMove.y-3-posy).get(lastMove.x-posx) == 5){
 					addNewBoard(lastMove.y-posy-3, lastMove.x-posx, fullBoard);
-				}else{
+				}else if(noMovesLeft){
 					addNewBoard(-3, -3, fullBoard);
 				}
 				break;
 			case 1:
-				addNewBoard(-3, -3, fullBoard);
+				 if(noMovesLeft){
+					addNewBoard(-3, -3, fullBoard);
+				 }
 				break;
 			case 2:
 				if(lastMove.y+3-posy < 0
@@ -357,7 +361,7 @@ public class Level1State extends GameState {
 				}
 				else if(fullBoard.get(lastMove.y+3-posy).get(lastMove.x-posx) == 5){
 					addNewBoard(lastMove.y-posy+3, lastMove.x-posx, fullBoard);
-				}else{
+				}else if(noMovesLeft){
 					addNewBoard(-3, -3, fullBoard);
 				}
 				break;
@@ -374,7 +378,7 @@ public class Level1State extends GameState {
 				}
 				else if(fullBoard.get(lastMove.y-3-posy).get(lastMove.x+3-posx) == 5){
 					addNewBoard(lastMove.y-posy-3, lastMove.x-posx+3, fullBoard);
-				}else{
+				}else if(noMovesLeft){
 					addNewBoard(-3, -3, fullBoard);
 				}
 				break;
@@ -387,7 +391,7 @@ public class Level1State extends GameState {
 				}
 				else if(fullBoard.get(lastMove.y-posy).get(lastMove.x+3-posx) == 5){
 					addNewBoard(lastMove.y-posy, lastMove.x-posx+3, fullBoard);
-				}else{
+				}else if(noMovesLeft){
 					addNewBoard(-3, -3, fullBoard);
 				}
 				break;
@@ -401,7 +405,7 @@ public class Level1State extends GameState {
 				else if(fullBoard.get(lastMove.y+3-posy).get(lastMove.x+3-posx) == 5){
 					addNewBoard(lastMove.y-posy+3, lastMove.x-posx+3, fullBoard);
 				}
-				else{
+				else if(noMovesLeft){
 					addNewBoard(-3, -3, fullBoard);
 				}
 				break;
@@ -424,7 +428,6 @@ public class Level1State extends GameState {
 				nextTurn();
 			}
 		}
-		update();
 	}
 
 	public int getTurn() {
