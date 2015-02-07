@@ -383,10 +383,10 @@ public class Level1State extends GameState {
 						||lastMove.y-posy>=fullBoard.size()
 						||lastMove.x+3-posx<0
 						||lastMove.x+3-posx>=fullBoard.get(0).size()){
-					addNewBoard(lastMove.y-posy, lastMove.x-posx-3, fullBoard);
+					addNewBoard(lastMove.y-posy, lastMove.x-posx+3, fullBoard);
 				}
 				else if(fullBoard.get(lastMove.y-posy).get(lastMove.x+3-posx) == 5){
-					addNewBoard(lastMove.y-posy, lastMove.x-posx-3, fullBoard);
+					addNewBoard(lastMove.y-posy, lastMove.x-posx+3, fullBoard);
 				}else{
 					addNewBoard(-3, -3, fullBoard);
 				}
@@ -415,13 +415,16 @@ public class Level1State extends GameState {
 		Point coords = getCoords(1, 1);
 		int currentX = (point.x/coords.x)/GamePanel.SCALE;
 		int currentY = (point.y/coords.y)/GamePanel.SCALE;
-		if(currentX < fullBoard.size() && currentY < fullBoard.get(0).size()){
-			if(fullBoard.get(currentY).get(currentX) == 0){
+		System.out.println(currentX + ", " + currentY);
+		if(currentY < fullBoard.size() && currentX < fullBoard.get(0).size()){ //One has to remember that X is Y and Y is X
+			if(fullBoard.get(currentY).get(currentX) == 0){                    //Literally 80% of my problems are that
 				fullBoard.get(currentY).set(currentX, getTurn());
 				lastMove = new Point(currentX, currentY);
+				System.out.println(lastMove);
 				nextTurn();
 			}
 		}
+		update();
 	}
 
 	public int getTurn() {

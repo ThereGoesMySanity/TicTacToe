@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	public static final int SCALE = 1;
 	private Thread thread;
 	private boolean running;
-	private int FPS = 60;
+	private int FPS = 5;
 	private long targetTime = 1000/FPS;
 	private BufferedImage image;
 	public static Graphics2D g;
@@ -70,9 +70,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 			try{Thread.sleep(wait);}catch(Exception e){e.printStackTrace();}
 		}
 	}
-	private void update(){
-		gsm.update();
-	}
+	private void update(){}
 	public static void drawImage(BufferedImage i){
 		g.drawImage(i, 0, 0, null);
 	}
