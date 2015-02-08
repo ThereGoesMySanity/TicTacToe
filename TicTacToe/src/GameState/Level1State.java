@@ -75,7 +75,7 @@ public class Level1State extends GameState {
 				}
 			}
 		}
-		if((x >= 0 && x < board.size())&&(y > 0 && y < board.get(0).size())){ //If within board
+		if((x >= 0 && x < board.size())&&(y >= 0 && y < board.get(0).size())){ //If within board
 			for(int i = 0; i < 3; i++){
 				for(int j = 0; j < 3; j++){
 					board.get(x + i).set(y + j, 0);
@@ -288,10 +288,12 @@ public class Level1State extends GameState {
 	private void buildFromLastMove(boolean noMovesLeft){
 		int posx = lastMove.x%3;
 		int posy = lastMove.y%3;
+		System.out.println(posx + ":" + posy);
 		switch(posx){
 		case 0:
 			switch(posy){
 			case 0:
+				System.out.println(":" + fullBoard.get(lastMove.y-3-posy).get(lastMove.x-3-posx));
 				if(lastMove.y-3-posy < 0
 						||lastMove.y-3-posy>=fullBoard.size()
 						||lastMove.x-3-posx<0
