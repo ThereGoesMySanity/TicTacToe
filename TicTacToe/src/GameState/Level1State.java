@@ -13,7 +13,9 @@ public class Level1State extends GameState {
 	private Point lastMove;
 	private int winner = 0;
 	public static String WIN;
-
+	private int offsetx;
+	private int offsety;
+	private int squareSize;
 	public Level1State(GameStateManager gsm){
 		this.gsm = gsm;
 		init();
@@ -101,14 +103,7 @@ public class Level1State extends GameState {
 		}
 	}
 	private Point getCoords(int x, int y){
-		int max;
-		if(fullBoard.size() > fullBoard.get(0).size()){
-			max = fullBoard.size();
-		}
-		else{
-			max = fullBoard.get(0).size();
-		}
-		return new Point(x*(GamePanel.HEIGHT/max), y*(GamePanel.HEIGHT/max));
+		return new Point(x*squareSize + offsetx, y*squareSize + offsety);
 	}
 	public void draw(Graphics2D g) {
 		Point point1 = new Point();
@@ -144,19 +139,22 @@ public class Level1State extends GameState {
 					if(fullBoard.get(i).get(j) == 2){
 						point1 = getCoords(j, i);
 						point2 = getCoords(j+1, i+1);
-						g.drawOval(point1.x+1, point1.y+1, point2.x/(j+1)-2, point2.y/(i+1)-2);
+						g.drawOval(point1.x+1, point1.y+1, squareSize, squareSize);
 					}
 					if(fullBoard.get(i).get(j) == 3){
 						point1 = getCoords(j, i);
 						point2 = getCoords(j+1, i+1);
 						g.setColor(Color.RED);
-						g.fillRect(point1.x+1, point1.y+1, point2.x/(j+1)-1, point2.y/(i+1)-1);
+						g.drawLine(point1.x, point1.y, point2.x, point2.y);
+						point1 = getCoords(j+1, i);
+						point2 = getCoords(j, i+1);
+						g.drawLine(point1.x, point1.y, point2.x, point2.y);
 					}
 					if(fullBoard.get(i).get(j) == 4){
 						point1 = getCoords(j, i);
 						point2 = getCoords(j+1, i+1);
 						g.setColor(Color.BLUE);
-						g.fillRect(point1.x+1, point1.y+1, point2.x/(j+1)-1, point2.y/(i+1)-1);
+						g.drawOval(point1.x+1, point1.y+1, squareSize, squareSize);
 					}
 					g.setColor(Color.BLACK);
 				}
@@ -169,9 +167,25 @@ public class Level1State extends GameState {
 	public void keyReleased(int k) {}
 
 	public void update() {
+		if (fullBoard.size() > fullBoard.get(0).size()){
+			squareSize = GamePanel.HEIGHT/fullBoard.size();
+			offsetx = (GamePanel.WIDTH - squareSize*fullBoard.get(0).size())/2;
+			offsety = 0;
+			
+		}
+		else if (fullBoard.get(0).size() > fullBoard.size()){
+			squareSize = GamePanel.WIDTH/fullBoard.get(0).size();
+			offsety = (GamePanel.HEIGHT - squareSize*fullBoard.size())/2;
+			offsetx = 0;
+		}
+		else{
+			squareSize = GamePanel.WIDTH/fullBoard.size();
+			offsetx = 0;
+			offsety = 0;
+		}
 		boolean full = true;
 		for(int i = 0; i < fullBoard.size(); i++){
-			for(int j = 0; j < fullBoard.get(0).size(); j++){
+			for(int j = 0; j < fullBoard.get(0).size(); j++){      //god this looks like such a mess, I know
 				if(fullBoard.get(i).get(j) == 0)full = false;
 				if(i < fullBoard.size()-2 
 						&& j < fullBoard.get(0).size()-2){
@@ -418,9 +432,12 @@ public class Level1State extends GameState {
 	}
 
 	public void mouseClicked(Point point) {
-		Point coords = getCoords(1, 1);
-		int currentX = (point.x/coords.x)/GamePanel.SCALE;
-		int currentY = (point.y/coords.y)/GamePanel.SCALE;
+		System.out.println(point);
+		System.out.println(squareSize);
+		System.out.println(offsetx);
+		System.out.println(offsety);
+		int currentX = (point.x - offsetx)/squareSize;
+		int currentY = (point.y - offsety)/squareSize;
 		System.out.println(currentX + ", " + currentY);
 		if(currentY < fullBoard.size() && currentX < fullBoard.get(0).size()){ //One has to remember that X is Y and Y is X
 			if(fullBoard.get(currentY).get(currentX) == 0){                    //Literally 80% of my problems are that

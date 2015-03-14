@@ -58,6 +58,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 			if(Level1State.WIN != null){
 				gsm.setState(GameStateManager.GAMEOVER);
 			}
+			update();
+			draw();
+			drawToScreen();
 			if(z == 1000){
 				z = 0;
 				drawToScreen();
@@ -83,9 +86,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	public void keyReleased(KeyEvent key){gsm.keyReleased(key.getKeyCode());}
 	public void mouseClicked(MouseEvent mouse) {
 		gsm.mouseClicked(mouse.getPoint());
-		update();
-		draw();
-		drawToScreen();
 	}
 	public void mouseEntered(MouseEvent mouse) {
 		
