@@ -2,6 +2,7 @@ package GameState;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import Main.GamePanel;
@@ -149,12 +150,42 @@ public class Level1State extends GameState {
 						point1 = getCoords(j+1, i);
 						point2 = getCoords(j, i+1);
 						g.drawLine(point1.x, point1.y, point2.x, point2.y);
+						for(int k = -1; k < 2; k++){
+							for(int l = -1; l < 2; l++){
+								if(i+k>0 && j+l>0 && i+k<fullBoard.size() && j+l<fullBoard.get(0).size()){
+									if(fullBoard.get(i+k).get(j+l) == 3){
+										point1 = getCoords(j, i);
+										point2 = getCoords(j+l, i+k);
+										g.drawLine(point1.x + squareSize/2, point1.y + squareSize/2, point2.x + squareSize/2, point2.y + squareSize/2);
+										g.drawLine(point1.x + squareSize/2 +1, point1.y + squareSize/2, point2.x + squareSize/2 +1, point2.y + squareSize/2);
+										g.drawLine(point1.x + squareSize/2, point1.y + squareSize/2 +1, point2.x + squareSize/2, point2.y + squareSize/2 +1);
+										g.drawLine(point1.x + squareSize/2 -1, point1.y + squareSize/2, point2.x + squareSize/2 -1, point2.y + squareSize/2);
+										g.drawLine(point1.x + squareSize/2, point1.y + squareSize/2 -1, point2.x + squareSize/2, point2.y + squareSize/2 -1);
+									}
+								}
+							}
+						}
 					}
 					if(fullBoard.get(i).get(j) == 4){
 						point1 = getCoords(j, i);
 						point2 = getCoords(j+1, i+1);
 						g.setColor(Color.BLUE);
 						g.drawOval(point1.x+1, point1.y+1, squareSize, squareSize);
+						for(int k = -1; k < 2; k++){
+							for(int l = -1; l < 2; l++){
+								if(i+k>0 && j+l>0 && i+k<fullBoard.size() && j+l<fullBoard.get(0).size()){
+									if(fullBoard.get(i+k).get(j+l) == 4){
+										point1 = getCoords(j, i);
+										point2 = getCoords(j+l, i+k);
+										g.drawLine(point1.x + squareSize/2, point1.y + squareSize/2, point2.x + squareSize/2, point2.y + squareSize/2);
+										g.drawLine(point1.x + squareSize/2 +1, point1.y + squareSize/2, point2.x + squareSize/2 +1, point2.y + squareSize/2);
+										g.drawLine(point1.x + squareSize/2, point1.y + squareSize/2 +1, point2.x + squareSize/2, point2.y + squareSize/2 +1);
+										g.drawLine(point1.x + squareSize/2 -1, point1.y + squareSize/2, point2.x + squareSize/2 -1, point2.y + squareSize/2);
+										g.drawLine(point1.x + squareSize/2, point1.y + squareSize/2 -1, point2.x + squareSize/2, point2.y + squareSize/2 -1);
+									}
+								}
+							}
+						}
 					}
 					g.setColor(Color.BLACK);
 				}
@@ -162,8 +193,10 @@ public class Level1State extends GameState {
 		}
 	}
 
-	public void keyPressed(int k) {}
-
+	public void keyPressed(int k) {
+		if(k == KeyEvent.VK_R)gsm.setState(gsm.LEVEL1STATE);
+	}
+	
 	public void keyReleased(int k) {}
 
 	public void update() {
@@ -171,7 +204,6 @@ public class Level1State extends GameState {
 			squareSize = GamePanel.HEIGHT/fullBoard.size();
 			offsetx = (GamePanel.WIDTH - squareSize*fullBoard.get(0).size())/2;
 			offsety = 0;
-			
 		}
 		else if (fullBoard.get(0).size() > fullBoard.size()){
 			squareSize = GamePanel.WIDTH/fullBoard.get(0).size();
@@ -298,7 +330,6 @@ public class Level1State extends GameState {
 		}
 	}
 
-
 	private void buildFromLastMove(boolean noMovesLeft){
 		int posx = lastMove.x%3;
 		int posy = lastMove.y%3;
@@ -364,9 +395,9 @@ public class Level1State extends GameState {
 				}
 				break;
 			case 1:
-				 if(noMovesLeft){
+				if(noMovesLeft){
 					addNewBoard(-3, -3, fullBoard);
-				 }
+				}
 				break;
 			case 2:
 				if(lastMove.y+3-posy < 0
