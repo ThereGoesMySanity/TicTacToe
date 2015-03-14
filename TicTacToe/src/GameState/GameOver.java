@@ -41,4 +41,6 @@ public class GameOver extends GameState {
 	public void mouseClicked(Point click) {
 		
 	}
+	@Override
+	public void mouseReleased(Point click) {}
 }

@@ -194,7 +194,7 @@ public class Level1State extends GameState {
 	}
 
 	public void keyPressed(int k) {
-		if(k == KeyEvent.VK_R)gsm.setState(gsm.LEVEL1STATE);
+		if(k == KeyEvent.VK_R)gsm.setState(GameStateManager.LEVEL1STATE);
 	}
 	
 	public void keyReleased(int k) {}
@@ -462,7 +462,7 @@ public class Level1State extends GameState {
 		printBoard(fullBoard);
 	}
 
-	public void mouseClicked(Point point) {
+	public void mouseReleased(Point point) {
 		System.out.println(point);
 		System.out.println(squareSize);
 		System.out.println(offsetx);
@@ -494,4 +494,7 @@ public class Level1State extends GameState {
 			break;
 		}
 	}
+
+	@Override
+	public void mouseClicked(Point click) {}
 }

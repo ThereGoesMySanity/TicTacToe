@@ -23,9 +23,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	private boolean running;
 	private BufferedImage image;
 	public static Graphics2D g;
-	
+
 	private static GameStateManager gsm;
-	
+
 	public GamePanel() {
 		super();
 		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
@@ -47,11 +47,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 		running = true;
 		gsm = new GameStateManager();
 	}
-	
+
 	public void run(){
 		init();
-		
-		
+
+
 		draw();
 		int z = 0;
 		while(running){
@@ -68,40 +68,43 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 			z++;
 		}
 	}
+
 	private void update(){
 		gsm.update();
 	}
+
 	public static void drawImage(BufferedImage i){
 		g.drawImage(i, 0, 0, null);
 	}
+
 	public void draw(){gsm.draw(g);}
+
 	private void drawToScreen(){
 		Graphics g2 = getGraphics();
 		g2.drawImage(image, 0, 0, WIDTH*SCALE, HEIGHT*SCALE, null);
 		g2.dispose();
 	}
-	
+
 	public void keyTyped(KeyEvent key){}
+
 	public void keyPressed(KeyEvent key){gsm.keyPressed(key.getKeyCode());}
+
 	public void keyReleased(KeyEvent key){gsm.keyReleased(key.getKeyCode());}
-	public void mouseClicked(MouseEvent mouse) {
-		gsm.mouseClicked(mouse.getPoint());
-	}
-	public void mouseEntered(MouseEvent mouse) {
-		
-	}
-	public void mouseExited(MouseEvent mouse) {
-		
-	}
-	public void mousePressed(MouseEvent mouse) {
-		
-	}
+
 	public void mouseReleased(MouseEvent mouse) {
-		
+		gsm.mouseReleased(mouse.getPoint());
 	}
+
+	public void mouseEntered(MouseEvent mouse) {}
+
+	public void mouseExited(MouseEvent mouse) {}
+
+	public void mousePressed(MouseEvent mouse) {}
+
+	public void mouseClicked(MouseEvent mouse) {}
+
 	public static void reDraw() {
 		gsm.draw(g);
-		
+
 	}
-	
 }
