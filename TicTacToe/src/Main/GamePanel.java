@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import GameState.GameStateManager;
-import GameState.Level1State;
+import GameState.BoardState;
 
 public class GamePanel extends JPanel implements Runnable, KeyListener, MouseListener{
 	/**
@@ -55,7 +55,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 		draw();
 		int z = 0;
 		while(running){
-			if(Level1State.WIN != null){
+			if(BoardState.WIN != null){
 				gsm.setState(GameStateManager.GAMEOVER);
 			}
 			update();

@@ -22,10 +22,10 @@ public class GameOver extends GameState {
 	public void draw(Graphics2D g) {
 		FontMetrics fm = g.getFontMetrics();
         int x = ((GamePanel.WIDTH - fm.stringWidth("Game Over")) / 2);
-        int x2 = ((GamePanel.WIDTH - fm.stringWidth(Level1State.WIN + " Wins")) / 2);
+        int x2 = ((GamePanel.WIDTH - fm.stringWidth(BoardState.WIN + " Wins")) / 2);
         g.setColor(Color.GREEN);
 		g.drawString("Game Over", x, 32);
-		g.drawString(Level1State.WIN + " Wins", x2, 128);
+		g.drawString(BoardState.WIN + " Wins", x2, 128);
 	}
 
 	public void keyPressed(int k) {

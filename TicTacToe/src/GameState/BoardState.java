@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import Main.GamePanel;
 
-public class Level1State extends GameState {
+public class BoardState extends GameState {
 	//0 = blank but part of board, 1 and 2 = X and O, 3 and 4 = completed X and O row, 5 = Not board
 	private ArrayList<ArrayList<Integer>> fullBoard = new ArrayList<ArrayList<Integer>>();
 	private int turn = 1;
@@ -17,7 +17,7 @@ public class Level1State extends GameState {
 	private int offsetx;
 	private int offsety;
 	private int squareSize;
-	public Level1State(GameStateManager gsm){
+	public BoardState(GameStateManager gsm){
 		this.gsm = gsm;
 		init();
 	}
@@ -25,6 +25,7 @@ public class Level1State extends GameState {
 	private void addNewBoard(int x, int y, ArrayList<ArrayList<Integer>> board){
 		//Okay, I consider x to be the outside arraylist and I don't care if that's weird
 		//Also, I'll probably mess up a lot either way.
+		//Update 5/20/15: Yes I messed up a lot, oh well
 		if(x<0){ //expanding up
 			for(int i = 0; i < 3; i++){
 				ArrayList<Integer> z = new ArrayList<Integer>();
@@ -140,7 +141,7 @@ public class Level1State extends GameState {
 					if(fullBoard.get(i).get(j) == 2){
 						point1 = getCoords(j, i);
 						point2 = getCoords(j+1, i+1);
-						g.drawOval(point1.x+1, point1.y+1, squareSize, squareSize);
+						g.drawOval(point1.x+1, point1.y+1, squareSize-2, squareSize-2);
 					}
 					if(fullBoard.get(i).get(j) == 3){
 						point1 = getCoords(j, i);

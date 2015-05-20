@@ -20,7 +20,7 @@ public class GameStateManager {
 	}
 	private void loadState(int state){
 		if(state == LEVEL1STATE){
-			gameStates[state] = new Level1State(this);
+			gameStates[state] = new BoardState(this);
 		}
 		if(state == GAMEOVER){
 			gameStates[state] = new GameOver(this);
