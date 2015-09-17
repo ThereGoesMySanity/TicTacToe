@@ -8,19 +8,28 @@ public class GameStateManager {
 	public long btTime;
 	public static long btTimer;
 	public static boolean btCooldown;
-	public static final int NUMGAMESTATES = 2;
-	public static final int LEVEL1STATE = 0;
-	public static final int GAMEOVER = 1;
+	public static final int NUMGAMESTATES = 4;
+	
+	public static final int MENUSTATE = 0;
+	public static final int BOARDSTATE = 1;
+	public static final int OPTIONSSTATE = 2;
+	public static final int GAMEOVER = 3;
 
 	public GameStateManager(){
 		gameStates = new GameState[NUMGAMESTATES];
-		currentState = LEVEL1STATE;
+		currentState = MENUSTATE;
 		loadState(currentState);
 
 	}
 	private void loadState(int state){
-		if(state == LEVEL1STATE){
+		if(state == MENUSTATE){
+			gameStates[state] = new MenuState(this);
+		}
+		if(state == BOARDSTATE){
 			gameStates[state] = new BoardState(this);
+		}
+		if(state == OPTIONSSTATE){
+			gameStates[state] = new OptionsState(this);
 		}
 		if(state == GAMEOVER){
 			gameStates[state] = new GameOver(this);

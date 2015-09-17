@@ -36,7 +36,7 @@ public class GameOver extends GameState {
 
 	public void keyReleased(int k) {}
 	public void select(){
-		gsm.setState(GameStateManager.LEVEL1STATE);
+		gsm.setState(GameStateManager.BOARDSTATE);
 	}
 	public void mouseClicked(Point click) {
 		

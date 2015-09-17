@@ -115,7 +115,7 @@ public class BoardState extends GameState {
 		g.setColor(Color.BLACK);
 		for(int i = 0; i < fullBoard.size(); i++){
 			for(int j = 0; j < fullBoard.get(0).size(); j++){
-				if(fullBoard.get(i).get(j) != 5){
+				if(getSquare(i,  j) != 5){
 					if(i != fullBoard.size()-1){
 						if(fullBoard.get(i+1).get(j) != 5){ // if the one below it is also a valid space
 							point1 = getCoords(j, i+1);
@@ -130,7 +130,7 @@ public class BoardState extends GameState {
 							g.drawLine(point1.x, point1.y, point2.x, point2.y);
 						}
 					}
-					if(fullBoard.get(i).get(j) == 1){
+					if(getSquare(i,  j) == 1){
 						point1 = getCoords(j, i);
 						point2 = getCoords(j+1, i+1);
 						g.drawLine(point1.x, point1.y, point2.x, point2.y);
@@ -138,12 +138,12 @@ public class BoardState extends GameState {
 						point2 = getCoords(j, i+1);
 						g.drawLine(point1.x, point1.y, point2.x, point2.y);
 					}
-					if(fullBoard.get(i).get(j) == 2){
+					if(getSquare(i,  j) == 2){
 						point1 = getCoords(j, i);
 						point2 = getCoords(j+1, i+1);
 						g.drawOval(point1.x+1, point1.y+1, squareSize-2, squareSize-2);
 					}
-					if(fullBoard.get(i).get(j) == 3){
+					if(getSquare(i,  j) == 3){
 						point1 = getCoords(j, i);
 						point2 = getCoords(j+1, i+1);
 						g.setColor(Color.RED);
@@ -167,7 +167,7 @@ public class BoardState extends GameState {
 							}
 						}
 					}
-					if(fullBoard.get(i).get(j) == 4){
+					if(getSquare(i,  j) == 4){
 						point1 = getCoords(j, i);
 						point2 = getCoords(j+1, i+1);
 						g.setColor(Color.BLUE);
@@ -195,7 +195,7 @@ public class BoardState extends GameState {
 	}
 
 	public void keyPressed(int k) {
-		if(k == KeyEvent.VK_R)gsm.setState(GameStateManager.LEVEL1STATE);
+		if(k == KeyEvent.VK_R)gsm.setState(GameStateManager.BOARDSTATE);
 	}
 	
 	public void keyReleased(int k) {}
@@ -219,54 +219,53 @@ public class BoardState extends GameState {
 		boolean full = true;
 		for(int i = 0; i < fullBoard.size(); i++){
 			for(int j = 0; j < fullBoard.get(0).size(); j++){      //god this looks like such a mess, I know
-				if(fullBoard.get(i).get(j) == 0)full = false;
+				if(getSquare(i,  j) == 0)full = false;
 				if(i < fullBoard.size()-2 
 						&& j < fullBoard.get(0).size()-2){
-					if(fullBoard.get(i).get(j)==fullBoard.get(i+1).get(j+1)
-							&&fullBoard.get(i+1).get(j+1)==fullBoard.get(i+2).get(j+2)
-							&&(fullBoard.get(i).get(j)==1||fullBoard.get(i).get(j)==2)){
-						fullBoard.get(i).set(j, fullBoard.get(i).get(j)+2);
-						fullBoard.get(i+1).set(j+1, fullBoard.get(i).get(j));
-						fullBoard.get(i+2).set(j+2, fullBoard.get(i).get(j));
+					if(getSquare(i,  j)==fullBoard.get(i+1).get(j+1)
+					 &&fullBoard.get(i+1).get(j+1)==fullBoard.get(i+2).get(j+2)
+					&&(getSquare(i,  j)==1
+					 ||getSquare(i,  j)==2)){
+						fullBoard.get(i).set(j, getSquare(i,  j)+2);
+						fullBoard.get(i+1).set(j+1, getSquare(i,  j));
+						fullBoard.get(i+2).set(j+2, getSquare(i,  j));
 						buildFromLastMove(false);
 					}
 				}
 				if(i < fullBoard.size()-2){
-					if(fullBoard.get(i).get(j)==fullBoard.get(i+1).get(j)
+					if(getSquare(i,  j)==fullBoard.get(i+1).get(j)
 							&&fullBoard.get(i+1).get(j)==fullBoard.get(i+2).get(j)
-							&&(fullBoard.get(i).get(j)==1||fullBoard.get(i).get(j)==2)){
-						fullBoard.get(i).set(j, fullBoard.get(i).get(j)+2);
-						fullBoard.get(i+1).set(j, fullBoard.get(i).get(j));
-						fullBoard.get(i+2).set(j, fullBoard.get(i).get(j));
+							&&(getSquare(i,  j)==1||getSquare(i,  j)==2)){
+						fullBoard.get(i).set(j, getSquare(i,  j)+2);
+						fullBoard.get(i+1).set(j, getSquare(i,  j));
+						fullBoard.get(i+2).set(j, getSquare(i,  j));
 						buildFromLastMove(false);
 					}
 				}
 				if(j < fullBoard.get(0).size()-2){
-					if(fullBoard.get(i).get(j)==fullBoard.get(i).get(j+1)
+					if(getSquare(i,  j)==fullBoard.get(i).get(j+1)
 							&&fullBoard.get(i).get(j+1)==fullBoard.get(i).get(j+2)
-							&&(fullBoard.get(i).get(j)==1||fullBoard.get(i).get(j)==2)){
-						fullBoard.get(i).set(j, fullBoard.get(i).get(j)+2);
-						fullBoard.get(i).set(j+1, fullBoard.get(i).get(j));
-						fullBoard.get(i).set(j+2, fullBoard.get(i).get(j));
+							&&(getSquare(i,  j)==1||getSquare(i,  j)==2)){
+						fullBoard.get(i).set(j, getSquare(i,  j)+2);
+						fullBoard.get(i).set(j+1, getSquare(i,  j));
+						fullBoard.get(i).set(j+2, getSquare(i,  j));
 						buildFromLastMove(false);
 					}
 				}
 				if(j > 1 && i < fullBoard.size()-2){
-					if(fullBoard.get(i).get(j)==fullBoard.get(i+1).get(j-1)
+					if(getSquare(i,  j)==fullBoard.get(i+1).get(j-1)
 							&&fullBoard.get(i+1).get(j-1)==fullBoard.get(i+2).get(j-2)
-							&&(fullBoard.get(i).get(j)==1||fullBoard.get(i).get(j)==2)){
-						fullBoard.get(i).set(j, fullBoard.get(i).get(j)+2);
-						fullBoard.get(i+1).set(j-1, fullBoard.get(i).get(j));
-						fullBoard.get(i+2).set(j-2, fullBoard.get(i).get(j));
+							&&(getSquare(i,  j)==1||getSquare(i,  j)==2)){
+						fullBoard.get(i).set(j, getSquare(i,  j)+2);
+						fullBoard.get(i+1).set(j-1, getSquare(i,  j));
+						fullBoard.get(i+2).set(j-2, getSquare(i,  j));
 						buildFromLastMove(false);
 					}
 				}
 			}
 		}
 		if(full){
-			System.out.println("full");
 			printBoard(fullBoard);
-			System.out.println("---------");
 			buildFromLastMove(true);
 			printBoard(fullBoard);
 		}
@@ -275,7 +274,7 @@ public class BoardState extends GameState {
 				ArrayList<Point> match = new ArrayList<Point>();
 				int previousSize = 0;
 				match.add(new Point(i, j));
-				if(fullBoard.get(i).get(j)==3){
+				if(getSquare(i,  j)==3){
 					while(previousSize < match.size()){
 						previousSize = match.size();
 						for(int x = 0; x < match.size(); x++){
@@ -296,7 +295,7 @@ public class BoardState extends GameState {
 					}
 					if(match.size()>=9)winner=1;
 				}
-				if(fullBoard.get(i).get(j)==4){
+				if(getSquare(i,  j)==4){
 					while(previousSize < match.size()){
 						previousSize = match.size();
 						for(int x = 0; x < match.size(); x++){
@@ -330,6 +329,10 @@ public class BoardState extends GameState {
 			}
 		}
 	}
+	
+	private int getSquare(int x, int y){
+		return fullBoard.get(x).get(y);
+	}
 
 	private void buildFromLastMove(boolean noMovesLeft){
 		int posx = lastMove.x%3;
@@ -339,7 +342,6 @@ public class BoardState extends GameState {
 		case 0:
 			switch(posy){
 			case 0:
-				System.out.println(":" + fullBoard.get(lastMove.y-3-posy).get(lastMove.x-3-posx));
 				if(lastMove.y-3-posy < 0
 						||lastMove.y-3-posy>=fullBoard.size()
 						||lastMove.x-3-posx<0
@@ -464,14 +466,9 @@ public class BoardState extends GameState {
 	}
 
 	public void mouseReleased(Point point) {
-		System.out.println(point);
-		System.out.println(squareSize);
-		System.out.println(offsetx);
-		System.out.println(offsety);
 		int currentX = (point.x - offsetx)/squareSize;
 		int currentY = (point.y - offsety)/squareSize;
-		System.out.println(currentX + ", " + currentY);
-		if(currentY < fullBoard.size() && currentX < fullBoard.get(0).size()){ //One has to remember that X is Y and Y is X
+		if(currentY < fullBoard.size() && currentX < fullBoard.get(0).size()){ //I have to remember that X is Y and Y is X
 			if(fullBoard.get(currentY).get(currentX) == 0){                    //Literally 80% of my problems are that
 				fullBoard.get(currentY).set(currentX, getTurn());
 				lastMove = new Point(currentX, currentY);
@@ -486,13 +483,10 @@ public class BoardState extends GameState {
 	}
 
 	private void nextTurn() {
-		switch(turn){
-		case 1:
+		if(turn == 1){
 			turn = 2;
-			break;
-		case 2:
+		}else{
 			turn = 1;
-			break;
 		}
 	}
 
