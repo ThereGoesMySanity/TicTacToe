@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import Main.GamePanel;
@@ -13,10 +15,19 @@ public class BoardState extends GameState {
 	private int turn = 1;
 	private Point lastMove;
 	private int winner = 0;
-	public static String WIN;
 	private int offsetx;
 	private int offsety;
 	private int squareSize;
+
+	private int mouseX;
+	private int mouseY;
+
+	private Color colorX;
+	private Color colorO;
+	private Color colorBoard;
+	private BufferedImage xPic;
+	private BufferedImage oPic;
+
 	public BoardState(GameStateManager gsm){
 		this.gsm = gsm;
 		init();
@@ -95,6 +106,11 @@ public class BoardState extends GameState {
 	}
 
 	public void init(){
+		colorX = gsm.xColor;
+		colorO = gsm.oColor;
+		colorBoard = gsm.boardColor;
+		xPic = gsm.xImage;
+		oPic = gsm.oImage;
 		for(int i = 0; i < 3; i++){
 			ArrayList<Integer> z = new ArrayList<Integer>();
 			for(int j = 0; j < 3; j++){
@@ -112,7 +128,10 @@ public class BoardState extends GameState {
 		Point point2 = new Point();
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, GamePanel.HEIGHT, GamePanel.WIDTH);
-		g.setColor(Color.BLACK);
+		g.setColor(Color.GREEN);
+		point1 = getCoords(mouseX, mouseY);
+		g.fillRect(point1.x, point1.y, squareSize, squareSize);
+		g.setColor(colorBoard);
 		for(int i = 0; i < fullBoard.size(); i++){
 			for(int j = 0; j < fullBoard.get(0).size(); j++){
 				if(getSquare(i,  j) != 5){
@@ -131,26 +150,39 @@ public class BoardState extends GameState {
 						}
 					}
 					if(getSquare(i,  j) == 1){
+
 						point1 = getCoords(j, i);
 						point2 = getCoords(j+1, i+1);
-						g.drawLine(point1.x, point1.y, point2.x, point2.y);
-						point1 = getCoords(j+1, i);
-						point2 = getCoords(j, i+1);
-						g.drawLine(point1.x, point1.y, point2.x, point2.y);
+						if(xPic != null){
+							g.drawImage(xPic, point1.x, point1.y, squareSize, squareSize, null);
+						}else{
+							g.drawLine(point1.x, point1.y, point2.x, point2.y);
+							point1 = getCoords(j+1, i);
+							point2 = getCoords(j, i+1);
+							g.drawLine(point1.x, point1.y, point2.x, point2.y);
+						}
 					}
 					if(getSquare(i,  j) == 2){
 						point1 = getCoords(j, i);
 						point2 = getCoords(j+1, i+1);
-						g.drawOval(point1.x+1, point1.y+1, squareSize-2, squareSize-2);
+						if(oPic != null){
+							g.drawImage(oPic, point1.x, point1.y, squareSize, squareSize, null);
+						}else{
+							g.drawOval(point1.x+1, point1.y+1, squareSize-2, squareSize-2);
+						}
 					}
 					if(getSquare(i,  j) == 3){
 						point1 = getCoords(j, i);
 						point2 = getCoords(j+1, i+1);
-						g.setColor(Color.RED);
-						g.drawLine(point1.x, point1.y, point2.x, point2.y);
-						point1 = getCoords(j+1, i);
-						point2 = getCoords(j, i+1);
-						g.drawLine(point1.x, point1.y, point2.x, point2.y);
+						g.setColor(colorX);
+						if(xPic != null){
+							g.drawImage(xPic, point1.x, point1.y, squareSize, squareSize, null);
+						}else{
+							g.drawLine(point1.x, point1.y, point2.x, point2.y);
+							point1 = getCoords(j+1, i);
+							point2 = getCoords(j, i+1);
+							g.drawLine(point1.x, point1.y, point2.x, point2.y);
+						}
 						for(int k = -1; k < 2; k++){
 							for(int l = -1; l < 2; l++){
 								if(i+k>0 && j+l>0 && i+k<fullBoard.size() && j+l<fullBoard.get(0).size()){
@@ -170,8 +202,12 @@ public class BoardState extends GameState {
 					if(getSquare(i,  j) == 4){
 						point1 = getCoords(j, i);
 						point2 = getCoords(j+1, i+1);
-						g.setColor(Color.BLUE);
-						g.drawOval(point1.x+1, point1.y+1, squareSize, squareSize);
+						g.setColor(colorO);
+						if(oPic != null){
+							g.drawImage(oPic, point1.x, point2.x, squareSize, squareSize, null);
+						}else{
+							g.drawOval(point1.x+1, point1.y+1, squareSize, squareSize);
+						}
 						for(int k = -1; k < 2; k++){
 							for(int l = -1; l < 2; l++){
 								if(i+k>0 && j+l>0 && i+k<fullBoard.size() && j+l<fullBoard.get(0).size()){
@@ -188,7 +224,7 @@ public class BoardState extends GameState {
 							}
 						}
 					}
-					g.setColor(Color.BLACK);
+					g.setColor(colorBoard);
 				}
 			}
 		}
@@ -197,7 +233,7 @@ public class BoardState extends GameState {
 	public void keyPressed(int k) {
 		if(k == KeyEvent.VK_R)gsm.setState(GameStateManager.BOARDSTATE);
 	}
-	
+
 	public void keyReleased(int k) {}
 
 	public void update() {
@@ -223,9 +259,9 @@ public class BoardState extends GameState {
 				if(i < fullBoard.size()-2 
 						&& j < fullBoard.get(0).size()-2){
 					if(getSquare(i,  j)==fullBoard.get(i+1).get(j+1)
-					 &&fullBoard.get(i+1).get(j+1)==fullBoard.get(i+2).get(j+2)
-					&&(getSquare(i,  j)==1
-					 ||getSquare(i,  j)==2)){
+							&&fullBoard.get(i+1).get(j+1)==fullBoard.get(i+2).get(j+2)
+							&&(getSquare(i,  j)==1
+							||getSquare(i,  j)==2)){
 						fullBoard.get(i).set(j, getSquare(i,  j)+2);
 						fullBoard.get(i+1).set(j+1, getSquare(i,  j));
 						fullBoard.get(i+2).set(j+2, getSquare(i,  j));
@@ -322,14 +358,14 @@ public class BoardState extends GameState {
 		}
 		if(winner != 0){
 			if(winner == 1){
-				WIN = "X";
+				gsm.WIN = "X";
 			}
 			else{
-				WIN = "O";
+				gsm.WIN = "O";
 			}
 		}
 	}
-	
+
 	private int getSquare(int x, int y){
 		return fullBoard.get(x).get(y);
 	}
@@ -492,4 +528,14 @@ public class BoardState extends GameState {
 
 	@Override
 	public void mouseClicked(Point click) {}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		int currentX = (e.getX() - offsetx)/squareSize;
+		int currentY = (e.getY() - offsety)/squareSize;
+		if(currentY < fullBoard.size() && currentX < fullBoard.get(0).size()){ //I have to remember that X is Y and Y is X
+			mouseX = currentX;
+			mouseY = currentY;
+		}
+	}
 }

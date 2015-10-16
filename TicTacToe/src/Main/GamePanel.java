@@ -1,17 +1,22 @@
 package Main;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GameState.GameStateManager;
-import GameState.BoardState;
 
-public class GamePanel extends JPanel implements Runnable, KeyListener, MouseListener{
+public class GamePanel extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener{
 	/**
 	 * 
 	 */
@@ -26,8 +31,14 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 
 	private static GameStateManager gsm;
 
+	private JFileChooser jfc = new JFileChooser();
+	FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "png", "gif", "jpeg");
+	
+	
+	
 	public GamePanel() {
 		super();
+		jfc.setFileFilter(filter);
 		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		setFocusable(true);
 		requestFocus();
@@ -38,6 +49,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 			thread = new Thread(this);
 			addMouseListener(this);
 			addKeyListener(this);
+			addMouseMotionListener(this);
 			thread.start();
 		}
 	}
@@ -51,7 +63,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	public void run(){
 		init();
 		while(running){
-			if(BoardState.WIN != null){
+			if(gsm.WIN != null){
 				gsm.setState(GameStateManager.GAMEOVER);
 			}
 			update();
@@ -97,5 +109,18 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	public static void reDraw() {
 		gsm.draw(g);
 
+	}
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		gsm.mouseMoved(e);
+	}
+	public File getImage() {
+		if(jfc.showOpenDialog(this)==JFileChooser.APPROVE_OPTION)return jfc.getSelectedFile();
+		else return null;
 	}
 }

@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
 
 import com.sun.glass.events.KeyEvent;
 
@@ -86,5 +87,11 @@ public class MenuState extends GameState{
 	public void update() {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		if(e.getY() >= 220 && e.getY() <= 220 + options.length*60&&e.getX()>=360){
+			currentChoice = (e.getY()-220)/60;
+		}
 	}
 }

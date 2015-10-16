@@ -1,6 +1,7 @@
 package GameState;
 
 import java.awt.Point;
+import java.awt.event.MouseEvent;
 
 public abstract class GameState {
 	protected GameStateManager gsm;
@@ -11,4 +12,5 @@ public abstract class GameState {
 	public abstract void keyReleased(int k);
 	public abstract void mouseReleased(Point click);
 	public abstract void mouseClicked(Point click);
+	public abstract void mouseMoved(MouseEvent e);
 }
