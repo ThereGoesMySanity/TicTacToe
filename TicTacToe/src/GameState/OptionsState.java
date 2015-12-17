@@ -82,19 +82,19 @@ public class OptionsState extends GameState {
 			
 			switch(i){
 			case 0:
-				g.drawString((String) optionsColor.keySet().toArray()[xColor], 300, 200+ i*60);
+				g.drawString((String) optionsColor.keySet().toArray()[xColor], 400, 200+ i*60);
 				break;
 			case 1:
-				g.drawString(xPic, 300, 200+ i*60);
+				g.drawString(xPic, 400, 200+ i*60);
 				break;
 			case 2:
-				g.drawString((String) optionsColor.keySet().toArray()[oColor], 300, 200+ i*60);
+				g.drawString((String) optionsColor.keySet().toArray()[oColor], 400, 200+ i*60);
 				break;
 			case 3:
-				g.drawString(oPic, 300, 200+ i*60);
+				g.drawString(oPic, 400, 200+ i*60);
 				break;
 			case 4:
-				g.drawString((String) optionsColor.keySet().toArray()[boardColor], 300, 200+ i*60);
+				g.drawString((String) optionsColor.keySet().toArray()[boardColor], 400, 200+ i*60);
 				break;
 
 			}
