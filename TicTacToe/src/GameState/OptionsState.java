@@ -46,8 +46,8 @@ public class OptionsState extends GameState {
 		optionsColor.put("Black", Color.BLACK);
 		try{
 			titleColor = new Color (128, 0, 0);
-			titleFont = new Font("Fixedsys", Font.TRUETYPE_FONT, 28*2/GamePanel.SCALE);
-			font = new Font("Fixedsys", Font.TRUETYPE_FONT, 16*2/GamePanel.SCALE);
+			titleFont = new Font("Fixedsys", Font.TRUETYPE_FONT, (56));
+			font = new Font("Fixedsys", Font.TRUETYPE_FONT, (32));
 		}catch(Exception e){e.printStackTrace();}
 
 	}
@@ -65,13 +65,12 @@ public class OptionsState extends GameState {
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, 720, 720);
+		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		g.setColor(titleColor);
 		g.setFont(titleFont);
 		FontMetrics fm = g.getFontMetrics();
-		int x = ((320*2/GamePanel.SCALE - fm.stringWidth("Options")) / 2);
-		int y = ((240*2/GamePanel.SCALE - fm.getHeight()) / 2) + fm.getAscent();
-		g.drawString("Options", x, y-64*2/GamePanel.SCALE);
+		int x = ((GamePanel.WIDTH - fm.stringWidth("Options")) / 2);
+		g.drawString("Options", x, fm.getAscent()+(60));
 		g.setFont(font);
 		for(int i = 0; i < options.length; i++){
 			if(i==currentChoice){
@@ -82,23 +81,23 @@ public class OptionsState extends GameState {
 			
 			switch(i){
 			case 0:
-				g.drawString((String) optionsColor.keySet().toArray()[xColor], 400, 200+ i*60);
+				g.drawString((String) optionsColor.keySet().toArray()[xColor], (400), ((200 + i*60)));
 				break;
 			case 1:
-				g.drawString(xPic, 400, 200+ i*60);
+				g.drawString(xPic, (400), ((200 + i*60)));
 				break;
 			case 2:
-				g.drawString((String) optionsColor.keySet().toArray()[oColor], 400, 200+ i*60);
+				g.drawString((String) optionsColor.keySet().toArray()[oColor], (400), ((200 + i*60)));
 				break;
 			case 3:
-				g.drawString(oPic, 400, 200+ i*60);
+				g.drawString(oPic, (400), ((200 + i*60)));
 				break;
 			case 4:
-				g.drawString((String) optionsColor.keySet().toArray()[boardColor], 400, 200+ i*60);
+				g.drawString((String) optionsColor.keySet().toArray()[boardColor], (400), ((200 + i*60)));
 				break;
 
 			}
-			g.drawString(options[i], 150/GamePanel.SCALE, 200 + i*60);
+			g.drawString(options[i], (150), ((200 + i*60)));
 		}
 
 	}
@@ -112,6 +111,7 @@ public class OptionsState extends GameState {
 		case 1://xImage
 			try {
 				File file = Game.panel.getImage();
+				if(file == null)break;
 				xImage = ImageIO.read(file);
 				xPic = file.getName();
 			} catch (IOException e) {
@@ -129,6 +129,7 @@ public class OptionsState extends GameState {
 		case 3://oImage
 			try {
 				File file = Game.panel.getImage();
+				if(file == null)break;
 				oImage = ImageIO.read(file);
 				oPic = file.getName();
 			} catch (IOException e) {
@@ -162,7 +163,7 @@ public class OptionsState extends GameState {
 	@Override
 	public void mouseReleased(Point click) {
 		// TODO Auto-generated method stub
-		if(click.y >= 160 && click.y <= 160 + options.length*60&&click.x>=150){
+		if(click.y >= (160) && click.y <= ((160 + options.length*60))&&click.x>=(150)){
 			select((click.y-160)/60);
 		}
 	}
@@ -173,8 +174,8 @@ public class OptionsState extends GameState {
 	}
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if(e.getY() >= 160 && e.getY() <= 160 + options.length*60&&e.getX()>=150){
-			currentChoice = ((e.getY()-160)/60);
+		if(e.getY() >= (160) && e.getY() <= (160 + options.length*60)&&e.getX()>=(150)){
+			currentChoice = ((e.getY()-(160))/(60));
 		}
 	}
 }

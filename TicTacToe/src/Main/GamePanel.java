@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	private static final long serialVersionUID = 1L;
 	public static final int WIDTH = 720;
 	public static final int HEIGHT = 720;
-	public static final int SCALE = 1;
+	public static final double SCALE = 1;
 	private Thread thread;
 	private boolean running;
 	private BufferedImage image;
@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	public GamePanel() {
 		super();
 		jfc.setFileFilter(filter);
-		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
+		setPreferredSize(new Dimension((int)(WIDTH*SCALE), (int)(HEIGHT*SCALE)));
 		setFocusable(true);
 		requestFocus();
 	}
@@ -84,7 +84,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 
 	private void drawToScreen(){
 		Graphics g2 = getGraphics();
-		g2.drawImage(image, 0, 0, WIDTH*SCALE, HEIGHT*SCALE, null);
+		g2.drawImage(image, 0, 0, (int)(WIDTH*SCALE), (int)(HEIGHT*SCALE), null);
 		g2.dispose();
 	}
 

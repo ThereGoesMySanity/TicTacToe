@@ -25,7 +25,7 @@ public class MenuState extends GameState{
 		this.gsm = gsm;
 		try{
 			titleColor = new Color (128, 0, 0);
-			titleFont = new Font("Fixedsys", Font.TRUETYPE_FONT, 56/GamePanel.SCALE);
+			titleFont = new Font("Fixedsys", Font.TRUETYPE_FONT, (56));
 		}catch(Exception e){e.printStackTrace();}
 		
 	}
@@ -46,7 +46,7 @@ public class MenuState extends GameState{
 			}else{
 				g.setColor(Color.LIGHT_GRAY);
 			}
-			g.drawString(options[i], 360/GamePanel.SCALE, 280/GamePanel.SCALE + i*60/GamePanel.SCALE);
+			g.drawString(options[i], ((360)), (280) + (i*60));
 		}
 	}
 	private void select(int choice){
@@ -74,8 +74,8 @@ public class MenuState extends GameState{
 	@Override
 	public void mouseReleased(Point click) {
 		// TODO Auto-generated method stub
-		if(click.y >= 220 && click.y <= 220 + options.length*60&&click.x>=360){
-			select((click.y-220)/60);
+		if(click.y >= (220) && click.y <= (220) + options.length*60&&click.x>=(360)){
+			select((click.y-(220))/60);
 		}
 	}
 	@Override
@@ -90,8 +90,8 @@ public class MenuState extends GameState{
 	}
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if(e.getY() >= 220 && e.getY() <= 220 + options.length*60&&e.getX()>=360){
-			currentChoice = (e.getY()-220)/60;
+		if(e.getY() >= (220) && e.getY() <= (220) + options.length*60&&e.getX()>=(360)){
+			currentChoice = (e.getY()-(220))/60;
 		}
 	}
 }
