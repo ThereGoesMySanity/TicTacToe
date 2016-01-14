@@ -13,6 +13,8 @@ import java.util.LinkedHashMap;
 
 import javax.imageio.ImageIO;
 
+import com.sun.glass.events.KeyEvent;
+
 import Main.Game;
 import Main.GamePanel;
 
@@ -152,8 +154,15 @@ public class OptionsState extends GameState {
 
 	@Override
 	public void keyPressed(int k) {
-		// TODO Auto-generated method stub
-
+		if(k == KeyEvent.VK_ENTER){
+			select(currentChoice);
+		}
+		if(k==KeyEvent.VK_DOWN){
+			currentChoice = (currentChoice+1)%options.length;
+		}
+		if(k==KeyEvent.VK_UP){
+			currentChoice = (currentChoice+3)%options.length;
+		}
 	}
 	@Override
 	public void keyReleased(int k) {
