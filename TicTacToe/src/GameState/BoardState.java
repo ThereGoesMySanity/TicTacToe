@@ -238,6 +238,18 @@ public class BoardState extends GameState {
 
 	public void keyPressed(int k) {
 		if(k == KeyEvent.VK_R)gsm.setState(GameStateManager.BOARDSTATE);
+		if(k==KeyEvent.VK_DOWN){
+			mouseY+=squareSize;
+		}
+		if(k==KeyEvent.VK_UP){
+			mouseY-=squareSize;
+		}
+		if(k==KeyEvent.VK_RIGHT){
+			mouseX+=squareSize;
+		}
+		if(k==KeyEvent.VK_LEFT){
+			mouseX-=squareSize;
+		}
 	}
 
 	public void keyReleased(int k) {}
