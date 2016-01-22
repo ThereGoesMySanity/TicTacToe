@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JOptionPane;
+
 import com.sun.glass.events.KeyEvent;
 
 import Main.GamePanel;
@@ -58,7 +60,7 @@ public class MenuState extends GameState{
 			gsm.setState(GameStateManager.OPTIONSSTATE);
 			break;
 		case 2:
-			//help
+			JOptionPane.showConfirmDialog(null, "It's tic tac toe that expands infinitely.\nNo explanation needed.", "You don't need help.", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 			break;
 		case 3:
 			System.exit(0);
@@ -73,7 +75,7 @@ public class MenuState extends GameState{
 			currentChoice = (currentChoice+1)%options.length;
 		}
 		if(k==KeyEvent.VK_UP){
-			currentChoice = (currentChoice+3)%options.length;
+			currentChoice = (currentChoice+options.length-1)%options.length;
 		}
 	}
 	public void keyReleased(int k){}

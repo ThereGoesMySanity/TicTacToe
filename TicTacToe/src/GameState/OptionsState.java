@@ -161,7 +161,7 @@ public class OptionsState extends GameState {
 			currentChoice = (currentChoice+1)%options.length;
 		}
 		if(k==KeyEvent.VK_UP){
-			currentChoice = (currentChoice+3)%options.length;
+			currentChoice = (currentChoice+options.length-1)%options.length;
 		}
 	}
 	@Override
