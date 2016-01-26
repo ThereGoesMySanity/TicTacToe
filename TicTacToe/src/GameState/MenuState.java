@@ -83,7 +83,7 @@ public class MenuState extends GameState{
 	public void mouseReleased(Point click) {
 		// TODO Auto-generated method stub
 		if(click.y >= (220) && click.y <= (220) + options.length*60&&click.x>=(360)){
-			select((click.y-(220))/60);
+			select(currentChoice);
 		}
 	}
 	@Override
