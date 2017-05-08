@@ -98,8 +98,8 @@ public class MenuState extends GameState{
 	}
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if(e.getY() >= (220) && e.getY() <= (220) + options.length*60&&e.getX()>=(360)){
-			currentChoice = (e.getY()-(220))/60;
+		if(e.getY() >= (240) && e.getY() <= (240) + options.length*60&&e.getX()>=(360)){
+			currentChoice = (e.getY()-(240))/60;
 		}
 	}
 }

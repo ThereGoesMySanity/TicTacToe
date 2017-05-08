@@ -98,13 +98,13 @@ public class BoardState extends GameState {
 			}
 		}
 	}
-
+/*
 	private void printBoard(ArrayList<ArrayList<Integer>> board){
 		for(int i = 0; i < board.size(); i++){
 			System.out.println(board.get(i));
 		}
 	}
-
+*/
 	public void init(){
 		colorX = gsm.xColor;
 		colorO = gsm.oColor;
@@ -124,19 +124,20 @@ public class BoardState extends GameState {
 		return new Point(x*squareSize + offsetx, y*squareSize + offsety);
 	}
 	private boolean inBounds(int x, int y){
-		if(x<0||x>fullBoard.get(0).size()||y<0||y>fullBoard.size())return false;return true;
+		return !(x<0||x>=fullBoard.size()||y<0||y>=fullBoard.get(0).size());
 	}
 	public void draw(Graphics2D g) {
+		Point point0 = new Point();
 		Point point1 = new Point();
 		Point point2 = new Point();
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, GamePanel.HEIGHT, GamePanel.WIDTH);
 		
 		
-		point1 = getCoords(mouseX, mouseY);
-		if(inBounds(mouseX,mouseY)&&getSquareType(mouseX, mouseY)==5)g.setColor(Color.RED);
+		point0 = getCoords(mouseX, mouseY);
+		if(inBounds(mouseY,mouseX)&&getSquareType(mouseY, mouseX)==5)g.setColor(Color.RED);
 		else g.setColor(Color.GREEN);
-		g.fillRect(point1.x, point1.y, squareSize, squareSize);
+		g.fillRect(point0.x, point0.y, squareSize, squareSize);
 		g.setColor(colorBoard);
 		for(int i = 0; i < fullBoard.size(); i++){
 			for(int j = 0; j < fullBoard.get(0).size(); j++){
@@ -237,30 +238,35 @@ public class BoardState extends GameState {
 	}
 
 	public void keyPressed(int k) {
-		if(k == KeyEvent.VK_R)gsm.setState(GameStateManager.BOARDSTATE);
+		if(k == KeyEvent.VK_R){
+			gsm.setState(GameStateManager.BOARDSTATE);
+		}
+		if(k == KeyEvent.VK_ENTER){
+			makeMove(mouseX, mouseY);
+		}
 		if(k==KeyEvent.VK_DOWN){
-			mouseY+=squareSize;
+			mouseY+=1;
 		}
 		if(k==KeyEvent.VK_UP){
-			mouseY-=squareSize;
+			mouseY-=1;
 		}
 		if(k==KeyEvent.VK_RIGHT){
-			mouseX+=squareSize;
+			mouseX+=1;
 		}
 		if(k==KeyEvent.VK_LEFT){
-			mouseX-=squareSize;
+			mouseX-=1;
 		}
 	}
 
 	public void keyReleased(int k) {}
 
 	public void update() {
-		if (fullBoard.size() > fullBoard.get(0).size()){
+		if (fullBoard.size()*GamePanel.WIDTH > fullBoard.get(0).size()*GamePanel.HEIGHT){
 			squareSize = GamePanel.HEIGHT/fullBoard.size();
 			offsetx = (GamePanel.WIDTH - squareSize*fullBoard.get(0).size())/2;
 			offsety = 0;
 		}
-		else if (fullBoard.get(0).size() > fullBoard.size()){
+		else if (fullBoard.size()*GamePanel.WIDTH < fullBoard.get(0).size()*GamePanel.HEIGHT){
 			squareSize = GamePanel.WIDTH/fullBoard.get(0).size();
 			offsety = (GamePanel.HEIGHT - squareSize*fullBoard.size())/2;
 			offsetx = 0;
@@ -319,9 +325,7 @@ public class BoardState extends GameState {
 			}
 		}
 		if(full){
-			printBoard(fullBoard);
 			buildFromLastMove(true);
-			printBoard(fullBoard);
 		}
 		for(int i = 0; i < fullBoard.size(); i++){
 			for(int j = 0; j < fullBoard.get(0).size(); j++){
@@ -385,7 +389,14 @@ public class BoardState extends GameState {
 	}
 
 	private int getSquareType(int x, int y){
+		try{
 		return fullBoard.get(x).get(y);
+		}catch(Exception e){
+			System.out.println(x + " " + y);
+			System.out.println(fullBoard.size() + " " + fullBoard.get(0).size());
+			System.exit(1);
+		}
+		return 0;
 	}
 
 	private void buildFromLastMove(boolean noMovesLeft){
@@ -516,19 +527,21 @@ public class BoardState extends GameState {
 			}
 			break;
 		}
-		printBoard(fullBoard);
 	}
 
 	public void mouseReleased(Point point) {
 		int currentX = (point.x - offsetx)/squareSize;
 		int currentY = (point.y - offsety)/squareSize;
 		if(currentY < fullBoard.size() && currentX < fullBoard.get(0).size()){ //I have to remember that X is Y and Y is X
-			if(fullBoard.get(currentY).get(currentX) == 0){                    //Literally 80% of my problems are that
-				fullBoard.get(currentY).set(currentX, getTurn());
-				lastMove = new Point(currentX, currentY);
-				System.out.println(lastMove);
-				nextTurn();
-			}
+			makeMove(currentX, currentY);                    //Literally 80% of my problems are that
+		}
+	}
+	public void makeMove(int x, int y){
+		if(fullBoard.get(y).get(x) == 0){
+			fullBoard.get(y).set(x, getTurn());
+			lastMove = new Point(x, y);
+			System.out.println(lastMove);
+			nextTurn();
 		}
 	}
 
@@ -551,9 +564,9 @@ public class BoardState extends GameState {
 	public void mouseMoved(MouseEvent e) {
 		int currentX = (e.getX() - offsetx)/squareSize;
 		int currentY = (e.getY() - offsety)/squareSize;
-		if(inBounds(currentX, currentY)){ //I have to remember that X is Y and Y is X
-			mouseX = currentX;
-			mouseY = currentY;
+		if(inBounds(currentY, currentX)){ //I have to remember that X is Y and Y is X
+			mouseX = currentX;			  //Update 2017-05-06: past me didn't remember this and I had to fix it :/
+			mouseY = currentY;			  //it was literally that exact line that I messed it up...
 		}
 	}
 }
