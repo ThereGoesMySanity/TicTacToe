@@ -5,18 +5,16 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
-
 import javax.swing.JOptionPane;
-
-import com.sun.glass.events.KeyEvent;
-
+import java.awt.event.KeyEvent;
 import Main.GamePanel;
 
 public class MenuState extends GameState{
 
 	private int currentChoice = 0;
 	private String[] options = {
-		"Start",
+		"Start Local",
+		"Start Online",
 		"Options",
 		"Help",
 		"Quit"
@@ -25,11 +23,12 @@ public class MenuState extends GameState{
 	private Font titleFont;
 	public MenuState(GameStateManager gsm){
 		this.gsm = gsm;
-		try{
+		try {
 			titleColor = new Color (128, 0, 0);
-			titleFont = new Font("Fixedsys", Font.TRUETYPE_FONT, (56));
-		}catch(Exception e){e.printStackTrace();}
-		
+			titleFont = new Font("Fixedsys", Font.TRUETYPE_FONT, 56);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	public void init(){}
 	public void draw(Graphics2D g){
@@ -57,12 +56,15 @@ public class MenuState extends GameState{
 			gsm.setState(GameStateManager.BOARDSTATE);
 			break;
 		case 1:
-			gsm.setState(GameStateManager.OPTIONSSTATE);
+			gsm.setState(GameStateManager.BOARDSTATE_NET);
 			break;
 		case 2:
-			JOptionPane.showConfirmDialog(null, "It's tic tac toe that expands infinitely.\nNo explanation needed.", "You don't need help.", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+			gsm.setState(GameStateManager.OPTIONSSTATE);
 			break;
 		case 3:
+			JOptionPane.showConfirmDialog(null, "It's tic tac toe that expands infinitely.\nNo explanation needed.", "You don't need help.", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+			break;
+		case 4:
 			System.exit(0);
 		}
 	}

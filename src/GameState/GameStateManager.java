@@ -4,16 +4,20 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import Net.Connection;
 public class GameStateManager {
 	private GameState[] gameStates;
 	private int currentState;
 	public String WIN;
-	public static final int NUMGAMESTATES = 4;
+	public static final int NUMGAMESTATES = 5;
 	
 	public static final int MENUSTATE = 0;
 	public static final int BOARDSTATE = 1;
-	public static final int OPTIONSSTATE = 2;
-	public static final int GAMEOVER = 3;
+	public static final int BOARDSTATE_NET = 2;
+	public static final int OPTIONSSTATE = 3;
+	public static final int GAMEOVER = 4;
 
 	public Color xColor = Color.RED;
 	public Color oColor = Color.BLUE;
@@ -25,7 +29,6 @@ public class GameStateManager {
 		gameStates = new GameState[NUMGAMESTATES];
 		currentState = MENUSTATE;
 		loadState(currentState);
-
 	}
 	private void loadState(int state){
 		if(state == MENUSTATE){
@@ -33,6 +36,20 @@ public class GameStateManager {
 		}
 		if(state == BOARDSTATE){
 			gameStates[state] = new BoardState(this);
+		}
+		if(state == BOARDSTATE_NET){
+			try {
+				Connection c = Connection.createConnection();
+				if (c != null) {
+					gameStates[BOARDSTATE_NET] = new NetBoardState(this, c);
+				} else {
+					setState(MENUSTATE);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				setState(MENUSTATE);
+			}
 		}
 		if(state == OPTIONSSTATE){
 			gameStates[state] = new OptionsState(this);
@@ -52,30 +69,27 @@ public class GameStateManager {
 		loadState(state);
 	}
 	public void update(){
-		if(gameStates[currentState]!=null)gameStates[currentState].update();
-		else setState(currentState);
+		if(gameStates[currentState]!=null) gameStates[currentState].update();
 	}
 
 	public void draw(Graphics2D g){
-		if(gameStates[currentState] != null){
-			gameStates[currentState].draw(g);
-		}
+		if(gameStates[currentState] != null) gameStates[currentState].draw(g);
 	}
 	public void keyPressed(int k){
-		gameStates[currentState].keyPressed(k);
+		if(gameStates[currentState]!=null) gameStates[currentState].keyPressed(k);
 	}
 	public void keyReleased(int k){
-		gameStates[currentState].keyReleased(k);
+		if(gameStates[currentState]!=null) gameStates[currentState].keyReleased(k);
 	}
 	public void mouseReleased(Point click) {
-		gameStates[currentState].mouseReleased(click);
+		if(gameStates[currentState]!=null) gameStates[currentState].mouseReleased(click);
 
 	}
 	public GameState getState(){
 		return gameStates[currentState];
 	}
 	public void mouseMoved(MouseEvent e) {
-		gameStates[currentState].mouseMoved(e);
+		if(gameStates[currentState]!=null) gameStates[currentState].mouseMoved(e);
 	}
 	
 }

@@ -1,73 +1,99 @@
 package Net;
 
-import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import javax.swing.JOptionPane;
 
 import GameState.BoardState;
 
 public abstract class Connection extends Thread {
-    static Pattern p = Pattern.compile("move:(\\d+),(\\d+)");
-    Socket socket;
-    BufferedReader in;
-    PrintWriter out;
-    String userTwo;
-    BoardState b;
-    int turn;
+	public static int DEFAULT_PORT = 5435;
+	DataInputStream in;
+	DataOutputStream out;
+	String user, userTwo;
+	BoardState b;
+	int playerNum;
+	boolean connected = false;
 
-    public int getTurn() {
-        return turn;
-    }
+	public static Connection createConnection() throws IOException {
+		String[] values = {"Host", "Connect"};
+		String value = (String)JOptionPane.showInputDialog(null, 
+				"Host server or connect to server?", 
+				"Connection", JOptionPane.INFORMATION_MESSAGE, null, values, values[0]);
+		String player = JOptionPane.showInputDialog("Enter name:");
+		if (value.equals("Host")) {
+			return new Server(player, DEFAULT_PORT);
+		} else if (value.equals("Connect")) {
+			String ipaddr = JOptionPane.showInputDialog("Enter IP to connect to:");
+			return new Client(player, ipaddr, DEFAULT_PORT);
+		}
+		return null;
+	}
 
-    public void setTurn(int turn) {
-        this.turn = turn;
-    }
+	public String getPlayerName() {
+		return userTwo;
+	}
 
-    public Connection(String username, Socket s, BoardState b)
-            throws IOException {
-        socket = s;
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(), true);
-        out.println("user:" + username);
-    }
+	public int getPlayerNum() {
+		return playerNum;
+	}
 
-    @Override
-    public void run() {
-        while (true) {
-            try {
-                if (in.ready()) {
-                    getInput(in.readLine());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+	public void setPlayerNum(int num) {
+		this.playerNum = num;
+	}
 
-        }
-    }
+	public Connection(String username)
+			throws IOException {
+		user = username;
+	}
 
-    public void makeMove(int x, int y) {
-        if (turn == b.getTurn()) {
-            out.println("move:" + x + "," + y);
-        }
-    }
+	public boolean connected() {
+		return connected;
+	}
 
-    public void getInput(String s) {
-        getInput2(s);
-        if (s.startsWith("user:")) {
-            userTwo = s.substring(5);
-        }
-        if (s.startsWith("move:")) {
-            Matcher m = p.matcher(s);
-            if (m.matches()) {
-                b.makeMove(Integer.parseInt(m.group(1)),
-                        Integer.parseInt(m.group(2)));
-            }
-        }
-    }
+	public void init(Socket s) throws IOException {
+		in = new DataInputStream(s.getInputStream());
+		out = new DataOutputStream(s.getOutputStream());
+	}
 
-    public abstract void getInput2(String s);
+	public void run(Socket s) throws IOException, InterruptedException {
+		out.writeUTF("user:" + user);
+		while (true) {
+			if (in.available() > 0) {
+				getInput(in.readUTF());
+			}
+			sleep(100);
+		}
+	}
+
+	public void setBoardState(BoardState b) {
+		this.b = b;
+	}
+
+	public void makeMove(int x, int y) {
+		if (playerNum == b.getTurn()) {
+			try {
+				out.writeUTF("move:" + x + "," + y);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void getInput(String s) {
+		getInput2(s);
+		if (s.startsWith("user:")) {
+			userTwo = s.substring(5);
+		}
+		if (s.startsWith("move:")) {
+			String[] m = s.substring(5).split(",");
+			b.makeMove(Integer.parseInt(m[0]),
+						Integer.parseInt(m[1]));
+		}
+	}
+
+	public abstract void getInput2(String s);
 }

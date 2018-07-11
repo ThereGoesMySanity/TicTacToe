@@ -10,11 +10,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
-
 import javax.imageio.ImageIO;
-
-import com.sun.glass.events.KeyEvent;
-
+import java.awt.event.KeyEvent;
 import Main.Game;
 import Main.GamePanel;
 

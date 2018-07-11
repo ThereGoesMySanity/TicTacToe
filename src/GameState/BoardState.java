@@ -10,12 +10,11 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import Main.GamePanel;
-import Net.Connection;
 
 public class BoardState extends GameState {
     //0 = blank but part of board, 1 and 2 = X and O, 3 and 4 = completed X and O row, 5 = Not board
     private ArrayList<ArrayList<Integer>> fullBoard = new ArrayList<ArrayList<Integer>>();
-    private int turn = 1;
+    protected int turn = 1;
     private Point lastMove;
     private int winner = 0;
     private int offsetx;
@@ -30,8 +29,6 @@ public class BoardState extends GameState {
     private Color colorBoard;
     private BufferedImage xPic;
     private BufferedImage oPic;
-
-    private Connection conn;
 
     public BoardState(GameStateManager gsm) {
         this.gsm = gsm;
@@ -111,7 +108,6 @@ public class BoardState extends GameState {
             ArrayList<Integer> z = new ArrayList<Integer>();
             for (int j = 0; j < 3; j++) {
                 z.add(0);
-
             }
             fullBoard.add(z);
         }
@@ -122,7 +118,9 @@ public class BoardState extends GameState {
     }
 
     private boolean inBounds(int x, int y) {
-        return !(x < 0 || x >= fullBoard.size() || y < 0
+        return !(x < 0 
+                || x >= fullBoard.size() 
+                || y < 0 
                 || y >= fullBoard.get(0).size());
     }
 
@@ -486,17 +484,15 @@ public class BoardState extends GameState {
         int currentY = (point.y - offsety) / squareSize;
         if (currentY < fullBoard.size() && currentX < fullBoard.get(0).size()) {
             //I have to remember that X is Y and Y is X
-            makeMove(currentX, currentY, false);//Literally 80% of my problems are that
+            makeMove(currentX, currentY);//Literally 80% of my problems are that
         }
     }
 
-    public void makeMove(int x, int y, boolean net) {
-        if(!net || p1. {
-            if (fullBoard.get(y).get(x) == 0) {
-                fullBoard.get(y).set(x, getTurn());
-                lastMove = new Point(x, y);
-                nextTurn();
-            }
+    public synchronized void makeMove(int x, int y) {
+        if (fullBoard.get(y).get(x) == 0) {
+            fullBoard.get(y).set(x, getTurn());
+            lastMove = new Point(x, y);
+            nextTurn();
         }
     }
 
@@ -505,11 +501,7 @@ public class BoardState extends GameState {
     }
 
     private void nextTurn() {
-        if (turn == 1) {
-            turn = 2;
-        } else {
-            turn = 1;
-        }
+        turn = turn % 2 + 1;
     }
 
     @Override
