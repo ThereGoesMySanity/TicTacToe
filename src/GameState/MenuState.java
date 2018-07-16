@@ -33,7 +33,7 @@ public class MenuState extends GameState{
 	public void init(){}
 	public void draw(Graphics2D g){
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, 720, 720);
+		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 		g.setColor(titleColor);
 		g.setFont(titleFont);
 		FontMetrics fm = g.getFontMetrics();
@@ -47,7 +47,7 @@ public class MenuState extends GameState{
 			}else{
 				g.setColor(Color.LIGHT_GRAY);
 			}
-			g.drawString(options[i], ((360)), (280) + (i*60));
+			g.drawString(options[i], getMenuX(), getMenuY() + (i * getMenuSpacing()));
 		}
 	}
 	private void select(int choice){
@@ -68,6 +68,15 @@ public class MenuState extends GameState{
 			System.exit(0);
 		}
 	}
+	private int getMenuX() {
+		return GamePanel.WIDTH / 2;
+	}
+	private int getMenuY() {
+		return GamePanel.HEIGHT / 3;
+	}
+	private int getMenuSpacing() {
+		return 60;
+	}
 	
 	public void keyPressed(int k){
 		if(k == KeyEvent.VK_ENTER){
@@ -84,7 +93,8 @@ public class MenuState extends GameState{
 	@Override
 	public void mouseReleased(Point click) {
 		// TODO Auto-generated method stub
-		if(click.y >= (220) && click.y <= (220) + options.length*60&&click.x>=(360)){
+		if(click.y >= getMenuY() - getMenuSpacing() && click.y <= getMenuY() + options.length * getMenuSpacing()
+				&& click.x >= getMenuX()){
 			select(currentChoice);
 		}
 	}
@@ -100,8 +110,9 @@ public class MenuState extends GameState{
 	}
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if(e.getY() >= (240) && e.getY() <= (240) + options.length*60&&e.getX()>=(360)){
-			currentChoice = (e.getY()-(240))/60;
+		if(e.getY() >= getMenuY() - getMenuSpacing() && e.getY() <= getMenuY() + options.length * getMenuSpacing()
+				&& e.getX() >= getMenuX()){
+			currentChoice = (e.getY() - getMenuY() + getMenuSpacing()) / getMenuSpacing();
 		}
 	}
 }

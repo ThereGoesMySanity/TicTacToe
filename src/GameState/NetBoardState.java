@@ -10,7 +10,7 @@ public class NetBoardState extends BoardState {
 	private Connection conn;
 
 	public NetBoardState(GameStateManager gsm, Connection c) {
-		super(gsm);
+		super(gsm, 3, 3);
 		conn = c;
 		c.setBoardState(this);
 		conn.start();

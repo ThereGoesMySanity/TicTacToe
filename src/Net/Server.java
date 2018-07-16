@@ -15,7 +15,6 @@ public class Server extends Connection {
 
     @Override
     public void getInput2(String s) {
-        // TODO Auto-generated method stub
     }
     
     @Override

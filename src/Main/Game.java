@@ -6,7 +6,6 @@ public class Game {
 		JFrame window = new JFrame("Giant TTT");
 		window.setContentPane(panel);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setResizable(false);
 		window.pack();
 		window.setVisible(true);
 	}

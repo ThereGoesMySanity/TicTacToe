@@ -23,8 +23,8 @@ public class GamePanel extends JPanel
      *
      */
     private static final long serialVersionUID = 1L;
-    public static final int WIDTH = 720;
-    public static final int HEIGHT = 720;
+    public static int WIDTH = 720;
+    public static int HEIGHT = 720;
     public static final double SCALE = 1;
     private Thread thread;
     private boolean running;
@@ -57,10 +57,14 @@ public class GamePanel extends JPanel
             thread.start();
         }
     }
+    
+    private void initImage() {
+    	image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+        g = (Graphics2D) image.getGraphics();
+    }
 
     private void init() {
-        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-        g = (Graphics2D) image.getGraphics();
+        initImage();
         running = true;
         gsm = new GameStateManager();
     }
@@ -69,6 +73,12 @@ public class GamePanel extends JPanel
     public void run() {
         init();
         while (running) {
+        	if (getWidth() != WIDTH * SCALE || getHeight() != HEIGHT * SCALE) {
+        		System.out.println("resize");
+        		WIDTH = (int) (getWidth() / SCALE);
+        		HEIGHT = (int) (getHeight()  / SCALE);
+        		initImage();
+        	}
             update();
             draw();
             drawToScreen();

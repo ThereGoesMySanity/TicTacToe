@@ -35,7 +35,7 @@ public class GameStateManager {
 			gameStates[state] = new MenuState(this);
 		}
 		if(state == BOARDSTATE){
-			gameStates[state] = new BoardState(this);
+			gameStates[state] = new BoardState(this, 3, 3);
 		}
 		if(state == BOARDSTATE_NET){
 			try {

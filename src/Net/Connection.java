@@ -63,7 +63,7 @@ public abstract class Connection extends Thread {
 		out.writeUTF("user:" + user);
 		while (true) {
 			if (in.available() > 0) {
-				getInput(in.readUTF());
+				getInput();
 			}
 			sleep(100);
 		}
@@ -83,7 +83,11 @@ public abstract class Connection extends Thread {
 		}
 	}
 
-	public void getInput(String s) {
+	public void getInput() throws IOException {
+		String s = "";
+		while (in.available() > 0) {
+			s += in.readUTF();
+		}
 		getInput2(s);
 		if (s.startsWith("user:")) {
 			userTwo = s.substring(5);
